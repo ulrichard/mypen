@@ -1,0 +1,107 @@
+
+pause 4 ms
+
+Urb 1 (C) ep= (read) 6 ms
+ 00000000: 80 06 00 01 00 00 12 00
+ 00000000: 12 01 00 02 ff 00 00 08 93 0a 02 00 17 01 01 02
+ 00000010: 03 01
+
+pause 0 ms
+
+Urb 2 (C) ep= (read) 10 ms
+ 00000000: 80 06 00 02 00 00 09 02
+ 00000000: 09 02 20 00 01 01 00 a0 64 09 04 00 00 02 ff 00
+ 00000010: ff 00 07 05 81 03 08 00 01 07 05 82 03 40 00 01
+ 00000020: 00 00 00 00 00 00 00 00
+
+pause 0 ms
+
+Urb 3 (C) ep= (write) 3 ms
+
+pause 3 ms
+
+Urb 4 (B) ep=81 (read) 0 ms
+
+pause 0 ms
+
+Urb 5 (B) ep=82 (read) 0 ms
+
+pause 1 ms
+
+Urb 6 (B) ep=81 (read) 22755 ms
+ 00000000: 01 01 17 01 00 30 05
+
+pause 0 ms
+
+Urb 7 (B) ep=82 (read) 11 ms
+ 00000000: 01 01 17 01 01 20
+
+pause 0 ms
+
+Urb 8 (B) ep=82 (read) 638 ms
+ 00000000: 01 01 17 01 00 20 00 00 00 00 00 00 00 00 68 00
+ 00000010: 50 00 00 00 4c 01 f0 ff ff bf f3 ff ff bf f3 ff
+ 00000020: ff bf f3 ff ff bf f3 ff ff bf f3 ff ff cf f2 ff
+ 00000030: ff cf f2 ff ff cf f2 ff ff bf f3 ff ff cf f2 ff
+ 00000040: ff cf f2 ff ff cf f2 ff ff bf f3 ff ff cf f2 ff
+ 00000050: ff cf f2 ff ff cf f2 ff ff cf f2 ff ff cf f2 ff
+ 00000060: ff cf f2 ff ff cf f2 ff ff cf f2 ff ff cf f2 ff
+ 00000070: ff cf f2 ff ff cf f2 ff ff cf f2 ff ff cf f2 ff
+ 00000080: ff cf f2 ff ff cf f2 ff ff cf f2 ff ff cf f2 1e
+ 00000090: 8f f1 ff 23 ff ff ff 2c ff ff ff 2c ff ff ff 2c
+ 000000a0: ff ff ff 2c ff ff ff 2c ff ff ff 2c ff ff ff 2c
+ 000000b0: ff ff ff 2c ff ff 1a ff 21 ff 5f f1 ff 26 ff ff
+ 000000c0: ff 2c ff ff ff 2c ff ff ff 2c ff ff ff 2c ff ff
+ 000000d0: ff 2c ff 5f f2 ff 25 ff ff ff 2c ff ff ff 2c ff
+ 000000e0: ff ff 2c ff ff ff 2c ff ff ff 2c ff ff ff 2c ff
+ 000000f0: ff ff 2c ff ff ff 2c ff ff ff 2c ff ff ff 2c ff
+ 00000100: ff ff 1d ff ff ff 2c ff ff ff 2c ff ff ff 2c ff
+ 00000110: ff ff 2c ff ff ff 1d ff ff ff 2c ff ff ff 2c ff
+ 00000120: ff 10 ff 2b ff 8f f9 bf f1 ff ff df f1 ff ff cf
+ 00000130: f2 ff ff cf f2 ff ff cf e2 f2 ff ff 2b ff ff ff
+ 00000140: 2c ff ff ff 1d ff ff 8f f2 13 ff ff 8f f1 23 ff
+ 00000150: ff ff 1d ff ff ff 1d ff ff ff 1d ff ff ff 1d ff
+ 00000160: ff ff
+
+pause 0 ms
+
+Urb 9 (B) ep=82 (read) 1368 ms
+ 00000000: 01 01 17 01 00 20 00 00 00 00 00 00 00 00 68 00
+ 00000010: 50 00 00 00 1c 01 f0 ff ff ff ff ff ff ff ff ff
+ 00000020: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 00000030: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 00000040: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 00000050: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 00000060: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 00000070: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 00000080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 00000090: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 000000a0: 11 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 000000b0: ff ff ff ff ff ff ff ff 2f f1 ff ff ff ff ff ff
+ 000000c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 000000d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 000000e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 000000f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff cf f9
+ 00000100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 17
+ 00000110: ff ff ff ff ff ff ff ff ff ff ff ff 5f f1 ff ff
+ 00000120: df f1 ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ 00000130: 11 f1
+
+pause 0 ms
+
+Urb 10 (B) ep=81 (read) 0 ms
+ 00000000: 01 01 17 01 00 30 01
+
+pause 0 ms
+
+Urb 11 (B) ep=82 (read) 2 ms
+ 00000000: 01 01 17 01 02 20
+
+pause 0 ms
+
+Urb 12 (B) ep=81 (read) 7 ms
+ 00000000: 01 01 17 01 00 30 00
+
+pause 0 ms
+
+Urb 13 (B) ep=81 (read) 0 ms
