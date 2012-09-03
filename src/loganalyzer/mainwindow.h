@@ -18,11 +18,12 @@ public:
     virtual ~RACSQTMain();
 
 private slots:
+    void load_images();
 
 private:
-    void load_image(const boost::filesystem::path& logfile, QLabel* pCntrl);
+    void load_image(const boost::filesystem::path& logfile, QLabel* pCntrl, QPixmap& pixmap);
 
-    QPixmap pixmap_;
+    QPixmap pixmap_[3];
 };
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
 

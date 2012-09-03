@@ -34,10 +34,9 @@ RACSQTMain::RACSQTMain()
 	setupUi(this);
     setCentralWidget(centralwidget);
 
-    const bfs::path logdir(bfs::path(__FILE__).parent_path().parent_path().parent_path() / "logs");
-    assert(bfs::exists(logdir));
+    load_images();
 
-    load_image(logdir / "line_parallel.out", img1);
+    connect(spinHeight,  SIGNAL(valueChanged(int)),  this, SLOT(load_images()));
 
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
@@ -46,15 +45,24 @@ RACSQTMain::~RACSQTMain()
 
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
-void RACSQTMain::load_image(const bfs::path& logfile, QLabel* pCntrl)
+void RACSQTMain::load_images()
+{
+    const bfs::path logdir(bfs::path(__FILE__).parent_path().parent_path().parent_path() / "logs");
+    assert(bfs::exists(logdir));
+
+    load_image(logdir / "line_parallel.out", img1, pixmap_[0]);
+    load_image(logdir / "line_perp.out",     img2, pixmap_[1]);
+    load_image(logdir / "refnr.out",         img3, pixmap_[2]);
+
+}
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
+void RACSQTMain::load_image(const bfs::path& logfile, QLabel* pCntrl, QPixmap& pixmap)
 {
     bfs::ifstream ifs(logfile);
     std::vector<uint8_t> values, tmpval;
 
     // regex for coarse filtering
-//    boost::regex regx("\\d\\d\\d\\d\\d\\d\\d\\d\\:.\\d\\d");
     boost::regex regx("\\s[0-9a-fA-F]{8}:(\\s[0-9a-fA-F]{2})+", boost::regex::extended);
-//    boost::regex regx("[1-9a-fA-F]{8}", boost::regex::extended);
     boost::smatch regxmatch;
 
     //grammar for value extraction
@@ -90,7 +98,7 @@ void RACSQTMain::load_image(const bfs::path& logfile, QLabel* pCntrl)
     // Header
     sstr.str("");
 
-    const size_t height = 64;
+    const size_t height = spinHeight->value();
     const size_t width = values.size() / height;
 
     sstr << "P5 " << width << " " << height << " " << 255 << "\n";
@@ -98,10 +106,9 @@ void RACSQTMain::load_image(const bfs::path& logfile, QLabel* pCntrl)
 
     BOOST_FOREACH(uint8_t vv, values)
         ba.append(vv);
-    const bool goodLoad = pixmap_.loadFromData(ba, "pgm");
+    const bool goodLoad = pixmap.loadFromData(ba, "pgm");
 
-
-     pCntrl->setPixmap(pixmap_);
+     pCntrl->setPixmap(pixmap);
 
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
