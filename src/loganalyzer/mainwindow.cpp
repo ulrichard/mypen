@@ -52,14 +52,16 @@ void RACSQTMain::load_image(const bfs::path& logfile, QLabel* pCntrl)
     std::vector<uint8_t> values, tmpval;
 
     // regex for coarse filtering
-    boost::regex regx("\\d\\d\\d\\d\\d\\d\\d\\d\\:.\\d\\d");
+//    boost::regex regx("\\d\\d\\d\\d\\d\\d\\d\\d\\:.\\d\\d");
+    boost::regex regx("\\s[0-9a-fA-F]{8}:(\\s[0-9a-fA-F]{2})+", boost::regex::extended);
+//    boost::regex regx("[1-9a-fA-F]{8}", boost::regex::extended);
     boost::smatch regxmatch;
 
     //grammar for value extraction
     typedef rule<> rule_t;
 
-	rule_t datafirst  = str_p("00000000:") >> *uint_p;
-	rule_t datasucc   = uint_p >> ":" >> +uint_p[push_back_a(tmpval)];
+	rule_t datafirst  = str_p("00000000:") >> *(space_p >> hex_p);
+	rule_t datasucc   = uint_p >> ":" >> +(space_p >> hex_p[push_back_a(tmpval)]);
     rule_t dataline   = datafirst || datasucc;
 
     while(!ifs.eof())
