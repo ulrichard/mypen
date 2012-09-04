@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    RACSQTMain mainwindow;
+    MyPenLogAnalyzerMain mainwindow;
 
     mainwindow.show();
 

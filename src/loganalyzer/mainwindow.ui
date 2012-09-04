@@ -178,6 +178,19 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QCheckBox" name="cbLog">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>270</y>
+      <width>121</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>cout logging</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

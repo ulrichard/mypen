@@ -20,7 +20,7 @@
 #include <boost/spirit/home/classic/utility/loops.hpp>
 #include <boost/spirit/include/classic_file_iterator.hpp>
 // std lib
-//#include <stdio>
+#include <iostream>
 
 using namespace boost::spirit::classic;
 using namespace phoenix;
@@ -29,7 +29,7 @@ namespace bfs  = boost::filesystem;
 namespace brng = boost::range;
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
-RACSQTMain::RACSQTMain()
+MyPenLogAnalyzerMain::MyPenLogAnalyzerMain()
     : QMainWindow()
 {
 	setupUi(this);
@@ -44,12 +44,12 @@ RACSQTMain::RACSQTMain()
 
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
-RACSQTMain::~RACSQTMain()
+MyPenLogAnalyzerMain::~MyPenLogAnalyzerMain()
 {
 
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
-void RACSQTMain::load_images()
+void MyPenLogAnalyzerMain::load_images()
 {
     const bfs::path logdir(bfs::path(__FILE__).parent_path().parent_path().parent_path() / "logs");
     assert(bfs::exists(logdir));
@@ -62,15 +62,16 @@ void RACSQTMain::load_images()
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
 struct bulk_end
 {
-    bulk_end(std::vector<uint8_t>& values, std::vector<uint8_t>& tmpval, const bool conti, const size_t blksize)
-        : values_(values), tmpval_(tmpval), continuous_(conti), blksize_(blksize) { }
+    bulk_end(std::vector<uint8_t>& values, std::vector<uint8_t>& tmpval, const bool conti, const size_t blksize, const bool logging)
+        : values_(values), tmpval_(tmpval), continuous_(conti), blksize_(blksize), logging_(logging) { }
 
     template<class iterT>
     void operator()(iterT begin, iterT end) const
     {
 		if(values_.empty() && tmpval_.size() < 20)
 			return;
-		std::cout << "bulk with " << tmpval_.size() << std::endl;
+        if(logging_)
+            std::cout << "bulk with " << tmpval_.size() << std::endl;
 		if(continuous_)
             brng::copy(tmpval_, std::back_inserter(values_));
         else
@@ -87,11 +88,13 @@ private:
 	std::vector<uint8_t>& tmpval_;
 	const bool            continuous_;
 	const size_t          blksize_;
+	const bool            logging_;
 };
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
-void RACSQTMain::load_image(const bfs::path& logfile, QLabel* pCntrl, QPixmap& pixmap)
+void MyPenLogAnalyzerMain::load_image(const bfs::path& logfile, QLabel* pCntrl, QPixmap& pixmap)
 {
-	std::cout << "load_image " << logfile.string() << std::endl;
+    if(cbLog->isChecked())
+        std::cout << "load_image " << logfile.string() << std::endl;
 
     std::vector<uint8_t> values, tmpval;
 
@@ -106,7 +109,7 @@ void RACSQTMain::load_image(const bfs::path& logfile, QLabel* pCntrl, QPixmap& p
     rule_t datafirst  = space_p >> str_p("00000000:") >> *(space_p >> hex_p) >> eol_p;
 	rule_t datasecond = space_p >> str_p("00000010:") >> repeat_p(spinHdr->value() - 16)[space_p >> hex_p] >> *(space_p >> hex_p[push_back_a(tmpval)]) >> eol_p;
 	rule_t datasucc   = space_p >> hex_p >> ":" >> +(space_p >> hex_p[push_back_a(tmpval)]) >> eol_p;
-    rule_t bulkread   = (datafirst >> datasecond >> *datasucc)[bulk_end(values, tmpval, cbContinuous->isChecked(), spinHeight->value())];
+    rule_t bulkread   = (datafirst >> datasecond >> *datasucc)[bulk_end(values, tmpval, cbContinuous->isChecked(), spinHeight->value(), cbLog->isChecked())];
     rule_t skipline   = *print_p >> eol_p;
     rule_t dumpfile   = +(bulkread || skipline);
 
@@ -142,7 +145,7 @@ void RACSQTMain::load_image(const bfs::path& logfile, QLabel* pCntrl, QPixmap& p
 
     const bool goodLoad = pixmap.loadFromData(ba, "pgm");
 
-	pixmap.save((logfile.string() + ".png").c_str());
+	pixmap.save(bfs::change_extension(logfile, ".png").string().c_str());
     pCntrl->setPixmap(pixmap);
 
 }
