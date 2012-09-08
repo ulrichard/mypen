@@ -191,6 +191,19 @@
      <string>cout logging</string>
     </property>
    </widget>
+   <widget class="QLabel" name="img4">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>190</y>
+      <width>301</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

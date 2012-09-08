@@ -57,7 +57,7 @@ void MyPenLogAnalyzerMain::load_images()
     load_image(logdir / "line_parallel.out", img1, pixmap_[0]);
     load_image(logdir / "line_perp.out",     img2, pixmap_[1]);
     load_image(logdir / "refnr.out",         img3, pixmap_[2]);
-
+    load_image(logdir / "squares.out",       img4, pixmap_[2]);
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
 struct bulk_end
