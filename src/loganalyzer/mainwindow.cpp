@@ -194,6 +194,8 @@ void MyPenLogAnalyzerMain::create_image_and_ocr()
                     {
                         sstr.str("");
                         sstr << "refnr_" << h << "_" << hdr << "_" << w << "_" << c;
+                        bfs::remove(logdir / (sstr.str() + ".png"));
+                        bfs::remove(logdir / (sstr.str() + ".txt"));
                         bfs::copy_file(logdir / "refnr.png", logdir / (sstr.str() + ".png"));
                         bfs::copy_file(logdir / "refnr.txt", logdir / (sstr.str() + ".txt"));
                     }
