@@ -21,6 +21,7 @@
 #include <boost/spirit/include/classic_file_iterator.hpp>
 // std lib
 #include <iostream>
+#include <set>
 
 using namespace boost::spirit::classic;
 using namespace phoenix;
@@ -134,14 +135,23 @@ void MyPenLogAnalyzerMain::load_image(const bfs::path& logfile, QLabel* pCntrl, 
 
     sstr << "P5 " << width * stepwid << " " << height / stepwid << " " << 255 << "\n";
     ba.append(sstr.str().c_str());
+    const size_t baHdrSize = ba.size();
 
-
-	for(size_t h=0; h<height; ++h)
-	    for(size_t w=0; w<width; ++w)
-		{
-			const size_t slice = w / stepwid;
-            ba.append(values[slice * stepwid * height + w % stepwid + h * stepwid]);
-		}
+    ba.resize(height * width + baHdrSize);
+    std::set<size_t> visited;
+    for(size_t w=0, j=0; w<width; w += stepwid)
+        for(size_t h=0; h<height; ++h)
+            for(size_t i=0; i<stepwid; ++i)
+            {
+                const int k = i + w + h * width + baHdrSize;
+                if(k - baHdrSize>= height * width)
+                    continue;
+                ba[k] = values[j++];
+                visited.insert(k - baHdrSize);
+            }
+    const size_t expected = height * width;
+    const size_t vissize = visited.size();
+    const size_t last = *--visited.end();
 
     const bool goodLoad = pixmap.loadFromData(ba, "pgm");
 
