@@ -133,7 +133,7 @@ void MyPenLogAnalyzerMain::load_image(const bfs::path& logfile, QLabel* pCntrl, 
     const size_t width = values.size() / height;
 
 
-    sstr << "P5 " << width * stepwid << " " << height / stepwid << " " << 255 << "\n";
+    sstr << "P5 " << width << " " << height << " " << 255 << "\n";
     ba.append(sstr.str().c_str());
     const size_t baHdrSize = ba.size();
 
