@@ -19,9 +19,11 @@ public:
 
 private slots:
     void load_images();
+    void create_image_and_ocr();
 
 private:
     void load_image(const boost::filesystem::path& logfile, QLabel* pCntrl, QPixmap& pixmap);
+
 
     QPixmap pixmap_[3];
 };

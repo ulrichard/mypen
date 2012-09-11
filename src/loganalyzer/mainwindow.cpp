@@ -21,6 +21,7 @@
 #include <boost/spirit/include/classic_file_iterator.hpp>
 // std lib
 #include <iostream>
+#include <set>
 
 using namespace boost::spirit::classic;
 using namespace phoenix;
@@ -42,6 +43,8 @@ MyPenLogAnalyzerMain::MyPenLogAnalyzerMain()
     connect(spinHdr,      SIGNAL(valueChanged(int)),  this, SLOT(load_images()));
     connect(cbContinuous, SIGNAL(toggled(bool)),      this, SLOT(load_images()));
 
+    connect(btnOCR,       SIGNAL(clicked()),            this, SLOT(create_image_and_ocr()));
+
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
 MyPenLogAnalyzerMain::~MyPenLogAnalyzerMain()
@@ -57,7 +60,7 @@ void MyPenLogAnalyzerMain::load_images()
     load_image(logdir / "line_parallel.out", img1, pixmap_[0]);
     load_image(logdir / "line_perp.out",     img2, pixmap_[1]);
     load_image(logdir / "refnr.out",         img3, pixmap_[2]);
-
+    load_image(logdir / "squares.out",       img4, pixmap_[2]);
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
 struct bulk_end
@@ -132,22 +135,74 @@ void MyPenLogAnalyzerMain::load_image(const bfs::path& logfile, QLabel* pCntrl, 
     const size_t width = values.size() / height;
 
 
-    sstr << "P5 " << width * stepwid << " " << height / stepwid << " " << 255 << "\n";
+    sstr << "P5 " << width << " " << height << " " << 255 << "\n";
     ba.append(sstr.str().c_str());
+    const size_t baHdrSize = ba.size();
 
-
-	for(size_t h=0; h<height; ++h)
-	    for(size_t w=0; w<width; ++w)
-		{
-			const size_t slice = w / stepwid;
-            ba.append(values[slice * stepwid * height + w % stepwid + h * stepwid]);
-		}
+    ba.resize(height * width + baHdrSize);
+    std::set<size_t> visited;
+    for(size_t w=0, j=0; w<width; w += stepwid)
+        for(size_t h=0; h<height; ++h)
+            for(size_t i=0; i<stepwid; ++i)
+            {
+                const int k = i + w + h * width + baHdrSize;
+                if(k - baHdrSize>= height * width)
+                    continue;
+                ba[k] = values[j++];
+                visited.insert(k - baHdrSize);
+            }
+    const size_t expected = height * width;
+    const size_t vissize = visited.size();
+    const size_t last = *--visited.end();
 
     const bool goodLoad = pixmap.loadFromData(ba, "pgm");
 
 	pixmap.save(bfs::change_extension(logfile, ".png").string().c_str());
     pCntrl->setPixmap(pixmap);
 
+}
+/////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
+void MyPenLogAnalyzerMain::create_image_and_ocr()
+{
+    const bfs::path logdir(bfs::path(__FILE__).parent_path().parent_path().parent_path() / "logs");
+    assert(bfs::exists(logdir));
+
+    const size_t defheight = 300;
+    const size_t defheader =  23;
+
+
+    for(int hd=0; hd<300; ++hd)
+    {
+        const size_t h = defheight + (hd % 2 == 0 ? hd / 2 : (1 - hd) / 2);
+        spinHeight->setValue(h);
+        for(int hdd=0; hdd<16; ++hdd)
+        {
+            const size_t hdr = defheader + (hdd % 2 == 0 ? hdd / 2 : (1 - hdd) / 2);
+            spinHdr->setValue(hdr);
+            for(int w=1; w<10; ++w)
+            {
+                spinWidth->setValue(w);
+                for(size_t c=0; c<2; ++c)
+                {
+                    cbContinuous->setChecked(0 != c);
+                    bfs::remove(logdir / "refnr.txt");
+                    load_image(logdir / "refnr.out", img3, pixmap_[2]);
+                    std::stringstream sstr;
+                    sstr << "tesseract " << (logdir / "refnr.png") << " " << (logdir / "refnr") << " -psm 7";
+                    system(sstr.str().c_str());
+                    if(bfs::file_size(logdir / "refnr.txt") > 10)
+                    {
+                        sstr.str("");
+                        sstr << "refnr_" << h << "_" << hdr << "_" << w << "_" << c;
+                        bfs::remove(logdir / (sstr.str() + ".png"));
+                        bfs::remove(logdir / (sstr.str() + ".txt"));
+                        bfs::copy_file(logdir / "refnr.png", logdir / (sstr.str() + ".png"));
+                        bfs::copy_file(logdir / "refnr.txt", logdir / (sstr.str() + ".txt"));
+                    }
+                }
+            }
+        }
+    }
 }
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
 
