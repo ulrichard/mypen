@@ -25,7 +25,7 @@ private:
     void load_image(const boost::filesystem::path& logfile, QLabel* pCntrl, QPixmap& pixmap);
 
 
-    QPixmap pixmap_[3];
+    QPixmap pixmap_[4];
 };
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8/////////9/////////A
 
